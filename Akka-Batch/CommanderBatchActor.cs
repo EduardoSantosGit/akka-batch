@@ -11,6 +11,15 @@ namespace Akka.Batch
         public CommanderBatchActor()
         {
 
+            Processing();
+
+        }
+
+        public void Processing()
+        {
+
+
+
         }
 
         protected override void PreStart()
