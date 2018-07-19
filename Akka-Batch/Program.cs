@@ -2,7 +2,7 @@
 using Akka.Configuration;
 using System;
 
-namespace Akka_Batch
+namespace Akka.Batch
 {
     class Program
     {
