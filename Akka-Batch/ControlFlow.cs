@@ -1,6 +1,8 @@
 ﻿using Akka.Actor;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Akka.Batch
@@ -15,10 +17,24 @@ namespace Akka.Batch
             _actorRef = actor;
         }
 
-        public void SendFileProcess(string path)
+        public void OnMonitor(string path)
         {
+            var lines = SendFileProcess(path);
 
+            foreach (var item in lines)
+            {
+                this.SendMessagesActor(item);
+            }
+            
         }
+
+        public string[] SendFileProcess(string path) => File.ReadAllLines(path);
+
+        public void SendMessagesActor(string message)
+        {
+            _actorRef.Tell(message);
+        }
+
 
     }
 }
