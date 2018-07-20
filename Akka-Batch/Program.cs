@@ -28,8 +28,12 @@ namespace Akka.Batch
 
 
             SystemStart = ActorSystem.Create("SystemStart", akkaConfig);
-            //var messages = SystemStart.ActorOf(Props.Create(() => new ReceiverMessageActor()), ActorPath.Receiver.Name);
-            //messages.Tell("start");
+
+            var actor = SystemStart.ActorOf(Props.Create(() => new CommanderBatchActor()), ActorPath.Commander.Path);
+
+            var control = new ControlFlow(actor);
+            control.OnMonitor("path");
+
             SystemStart.WhenTerminated.Wait();
 
         }
