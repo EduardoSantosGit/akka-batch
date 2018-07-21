@@ -1,14 +1,15 @@
 ﻿using Akka.Actor;
-using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Akka.Batch
 {
-    public class CommanderBatchActor : ReceiveActor
+    public class CoordinatorBatchActor : ReceiveActor
     {
 
-        public CommanderBatchActor()
+        private IActorRef _actorRef;
+
+        public CoordinatorBatchActor()
         {
 
             Processing();
@@ -24,6 +25,9 @@ namespace Akka.Batch
 
         protected override void PreStart()
         {
+            _actorRef = Context.ActorOf(Props.Create(() => new WorkerBatchActor())
+                 , ActorPath.Worker.Name);
+
             base.PreStart();
         }
 

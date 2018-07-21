@@ -29,7 +29,7 @@ namespace Akka.Batch
 
             SystemStart = ActorSystem.Create("SystemStart", akkaConfig);
 
-            var actor = SystemStart.ActorOf(Props.Create(() => new CommanderBatchActor()), ActorPath.Commander.Path);
+            var actor = SystemStart.ActorOf(Props.Create(() => new CoordinatorBatchActor()), ActorPath.Coordinator.Path);
 
             var control = new ControlFlow(actor);
             control.OnMonitor("path");

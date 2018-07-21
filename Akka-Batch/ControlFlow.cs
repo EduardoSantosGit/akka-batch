@@ -9,7 +9,6 @@ namespace Akka.Batch
 {
     public class ControlFlow
     {
-
         private readonly IActorRef _actorRef;
 
         public ControlFlow(IActorRef actor)
@@ -25,7 +24,6 @@ namespace Akka.Batch
             {
                 this.SendMessagesActor(item);
             }
-            
         }
 
         public string[] SendFileProcess(string path) => File.ReadAllLines(path);

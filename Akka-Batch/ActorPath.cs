@@ -8,7 +8,9 @@ namespace Akka.Batch
     {
 
         public const string SystemName = "SystemStart";
-        public static readonly ActorMetaData Commander = new ActorMetaData("commander", $"akka://{SystemName}/user/commander");
+        public static readonly ActorMetaData Coordinator = new ActorMetaData("coordinator", $"akka://{SystemName}/user/coordinator");
+        public static readonly ActorMetaData Worker = new ActorMetaData("worker", $"akka://{SystemName}/user/worker");
+
 
         public class ActorMetaData
         {
