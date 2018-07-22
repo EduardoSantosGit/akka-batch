@@ -10,6 +10,16 @@ namespace Akka.Batch
 
         public WorkerBatchActor()
         {
+            Sending();
+        }
+
+        public void Sending()
+        {
+
+            Receive<MessageOneData>(msg => 
+            {
+                Console.WriteLine(msg);
+            });
 
         }
 

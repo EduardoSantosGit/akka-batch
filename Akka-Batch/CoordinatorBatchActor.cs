@@ -19,7 +19,10 @@ namespace Akka.Batch
         public void Processing()
         {
 
-
+            Receive<MessageOneData>(msg => 
+            {
+                _actorRef.Tell(msg);
+            });
 
         }
 
