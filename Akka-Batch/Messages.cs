@@ -7,9 +7,12 @@ namespace Akka.Batch
     
     public class MessageOneData
     {
-
         public string LineData { get; set; }
+    }
 
+    public class MessageListData
+    {
+        public List<string> LineData { get; set; }
     }
 
 }

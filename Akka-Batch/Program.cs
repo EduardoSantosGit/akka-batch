@@ -10,29 +10,12 @@ namespace Akka.Batch
 
         static void Main(string[] args)
         {
+            SystemStart = ActorSystem.Create("SystemStart");
 
-            var akkaConfig = ConfigurationFactory.ParseString(@"
-                akka {  
-                    actor {
-                        provider = ""Akka.Remote.RemoteActorRefProvider, Akka.Remote""
-                    }
-                    remote {
-                        dot-netty.tcp {
-                            port = 8081
-                            hostname = 0.0.0.0
-                            public-hostname = localhost
-                        }
-                    }
-                }
-                ");
-
-
-            SystemStart = ActorSystem.Create("SystemStart", akkaConfig);
-
-            var actor = SystemStart.ActorOf(Props.Create(() => new CoordinatorBatchActor()), ActorPath.Coordinator.Path);
+            var actor = SystemStart.ActorOf(Props.Create(() => new CoordinatorBatchActor()), ActorPath.Coordinator.Name);
 
             var control = new ControlFlow(actor);
-            control.OnMonitor("path");
+            control.OnMonitor(@"C:\Users\staff\Desktop\data.txt");
 
             SystemStart.WhenTerminated.Wait();
 
