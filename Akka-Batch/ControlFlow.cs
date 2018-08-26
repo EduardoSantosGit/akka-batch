@@ -28,8 +28,9 @@ namespace Akka.Batch
 
         public string[] SendFileProcess(string path) => File.ReadAllLines(path);
 
-        public void SendMessagesActor(string message)
+        public void SendMessagesActor(string line)
         {
+            var message = new MessageOneData { LineData = line };
             _actorRef.Tell(message);
         }
 
