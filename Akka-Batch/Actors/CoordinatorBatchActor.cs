@@ -12,9 +12,7 @@ namespace Akka.Batch
 
         public CoordinatorBatchActor()
         {
-
             Processing();
-
         }
 
         public void Processing()
@@ -22,6 +20,13 @@ namespace Akka.Batch
 
             Receive<MessageOneItem>(msg => 
             {
+                var actorWorker = Context.Child(msg.LineData);
+                if (actorWorker.Equals(ActorRefs.Nobody))
+                {
+                    actorWorker = Context.ActorOf(Props.Create(() =>
+                            new WorkerBatchActor()), msg.LineData);
+                }
+
                 _actorRef.Tell(msg);
             });
 
@@ -29,9 +34,6 @@ namespace Akka.Batch
 
         protected override void PreStart()
         {
-            _actorRef = Context.ActorOf(Props.Create(() => new WorkerBatchActor())
-                 , ActorPath.Worker.Name);
-
             base.PreStart();
         }
 

@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Akka.Batch.Messages;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace Akka.Batch
 
         public void SendMessagesActor(string line)
         {
-            var message = new MessageOneData { LineData = line };
+            var message = new MessageOneItem { LineData = line };
             _actorRef.Tell(message);
         }
 

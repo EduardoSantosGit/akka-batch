@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Akka.Batch.Actors;
 using Akka.Configuration;
 using System;
 
@@ -12,10 +13,10 @@ namespace Akka.Batch
         {
             SystemStart = ActorSystem.Create("SystemStart");
 
-            var actor = SystemStart.ActorOf(Props.Create(() => new CoordinatorBatchActor()), ActorPath.Coordinator.Name);
+            var actor = SystemStart.ActorOf(Props.Create(() => new CommanderBatchActor()), ActorPath.Coordinator.Name);
 
             var control = new ControlFlow(actor);
-            control.OnMonitor(@"C:\Users\eduar\Desktop\lote.txt");
+            control.OnMonitor(@"D:\teste.txt");
 
             SystemStart.WhenTerminated.Wait();
 
