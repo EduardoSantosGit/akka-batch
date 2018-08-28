@@ -27,7 +27,7 @@ namespace Akka.Batch
                             new WorkerBatchActor()), msg.LineData);
                 }
 
-                _actorRef.Tell(msg);
+                actorWorker.Tell(msg);
             });
 
         }

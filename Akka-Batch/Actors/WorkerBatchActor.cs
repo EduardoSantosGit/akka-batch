@@ -8,9 +8,11 @@ namespace Akka.Batch
 {
     public class WorkerBatchActor : ReceiveActor
     {
+        private RequestService _service;
 
         public WorkerBatchActor()
         {
+            _service = new RequestService();
             Sending();
         }
 
@@ -18,7 +20,8 @@ namespace Akka.Batch
         {
             Receive<MessageOneItem>(msg => 
             {
-                Console.WriteLine(msg);
+                var e = _service.GetPage(msg.LineData).GetAwaiter().GetResult();
+                Console.WriteLine("Result {0}", e);
             });
 
         }
