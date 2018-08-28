@@ -19,7 +19,6 @@ namespace Akka.Batch
             control.OnMonitor(@"D:\teste.txt");
 
             SystemStart.WhenTerminated.Wait();
-
         }
     }
 }
