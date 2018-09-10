@@ -20,8 +20,9 @@ namespace Akka.Batch
         {
             Receive<MessageOneItem>(msg => 
             {
-                var e = _service.GetPage(msg.LineData).GetAwaiter().GetResult();
-                Console.WriteLine("Result {0}", e);
+                //var e = _service.GetPage(msg.LineData).GetAwaiter().GetResult();
+                //Console.WriteLine("Result {0}", e);
+                Sender.Tell(new MessageSuccess {  Status = "OK", Message = "Success", Sender = msg.Sender });
             });
 
         }

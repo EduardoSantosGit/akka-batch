@@ -10,4 +10,11 @@ namespace Akka.Batch.Messages
         public string LineData { get; set; }
         public IActorRef Sender { get; set; }
     }
+
+    public class MessageSuccess
+    {
+        public string Message { get; set; }
+        public string Status { get; set; }
+        public IActorRef Sender { get; set; }
+    }
 }

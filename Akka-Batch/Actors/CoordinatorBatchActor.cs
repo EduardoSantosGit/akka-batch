@@ -26,8 +26,13 @@ namespace Akka.Batch
                     actorWorker = Context.ActorOf(Props.Create(() =>
                             new WorkerBatchActor()), msg.LineData);
                 }
-
+                msg.Sender = Sender;
                 actorWorker.Tell(msg);
+            });
+
+            Receive<MessageSuccess>(msg => 
+            {
+                msg.Sender.Tell(msg);
             });
 
         }
