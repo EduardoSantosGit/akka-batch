@@ -35,6 +35,11 @@ namespace Akka.Batch
                 msg.Sender.Tell(msg);
             });
 
+            Receive<MessageError>(msg => 
+            {
+                msg.Sender.Tell(msg);
+            });
+
         }
 
         protected override void PreStart()

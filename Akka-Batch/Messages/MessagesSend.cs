@@ -5,16 +5,21 @@ using System.Text;
 
 namespace Akka.Batch.Messages
 {
-    public class MessageOneItem
+    public class Message
     {
-        public string LineData { get; set; }
         public IActorRef Sender { get; set; }
     }
 
-    public class MessageSuccess
+    public class MessageOneItem : Message
+    {
+        public string LineData { get; set; }
+    }
+
+    public class MessageSuccess : Message
     {
         public string Message { get; set; }
         public string Status { get; set; }
-        public IActorRef Sender { get; set; }
     }
+
+    public class MessageError : MessageSuccess { }
 }
