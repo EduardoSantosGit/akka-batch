@@ -15,11 +15,18 @@ namespace Processor
             _client = client;
         }
 
-        public async Task<HttpResponseMessage> GetAsync(string url)
+        public async Task<Result<string>> GetAsync(string url)
         {
             var response = await _client.GetAsync(url);
 
-            return response;
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return new Result<string>(ResultCode.OK, await response.Content.ReadAsStringAsync());
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                return new Result<string>(ResultCode.BadRequest, await response.Content.ReadAsStringAsync());
+            else if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return new Result<string>(ResultCode.NotFound, await response.Content.ReadAsStringAsync());
+
+            return new Result<string>(ResultCode.Error);
         }
 
     }
