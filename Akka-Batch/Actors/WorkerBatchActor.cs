@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using Processor;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,11 +9,11 @@ namespace Akka.Batch
 {
     public class WorkerBatchActor : ReceiveActor
     {
-        private RequestService _service;
+        private RequestClient _client;
 
         public WorkerBatchActor()
         {
-            _service = new RequestService();
+            _client = new RequestClient();
             Sending();
         }
 
@@ -20,9 +21,16 @@ namespace Akka.Batch
         {
             Receive<MessageOneItem>(msg => 
             {
-                //var e = _service.GetPage(msg.LineData).GetAwaiter().GetResult();
-                //Console.WriteLine("Result {0}", e);
-                Sender.Tell(new MessageSuccess {  Status = "OK", Message = "Success", Sender = msg.Sender });
+                var result = _client.GetDataApi(msg.LineData);
+
+                if(result.Status == ResultCode.OK)
+                {
+                    Sender.Tell(new MessageSuccess { Status = "OK", Message = "Success", Sender = msg.Sender });
+                }
+                else
+                {
+                    Sender.Tell(new MessageError { Message = result.Value.ToString() });
+                }
             });
 
         }

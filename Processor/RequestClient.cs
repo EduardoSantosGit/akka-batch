@@ -7,9 +7,10 @@ namespace Processor
 
         private readonly ProviderHttpMethod _provider;
 
-        public RequestClient(ProviderHttpMethod provider)
+        public RequestClient(ProviderHttpMethod provider = null)
         {
-            _provider = provider;
+            _provider = provider ?? new ProviderHttpMethod(
+                new System.Net.Http.HttpClient());
         }
 
         public Result<string> GetDataApi(string url)
