@@ -12,12 +12,12 @@ namespace Akka.Batch.Actors
 
         public CommanderBatchActor()
         {
-            Reading();
+            Working();
         }
 
-        public void Reading()
+        public void Working()
         {
-            Receive<MessageOneItem>(msg => 
+            Receive<MessageItem>(msg => 
             {
                 _coordinator.Tell(msg);
             });
@@ -26,9 +26,28 @@ namespace Akka.Batch.Actors
         protected override void PreStart()
         {
             _coordinator = Context.ActorOf(Props.Create(() =>
-                new CoordinatorBatchActor()), ActorPath.Coordinator.Name);
+                new CoordinatorBatchActor(), SupervisorStrategy()), ActorPath.Coordinator.Name);
 
             base.PreStart();
+        }
+
+        protected override SupervisorStrategy SupervisorStrategy()
+        {
+            return new OneForOneStrategy(
+                maxNrOfRetries: 10,
+                withinTimeRange: TimeSpan.FromMinutes(1),
+                localOnlyDecider: ex =>
+                {
+                    switch (ex)
+                    {
+                        case NullReferenceException nre:
+                            return Directive.Restart;
+                        case ArgumentException are:
+                            return Directive.Stop;
+                        default:
+                            return Directive.Escalate;
+                    }
+                });
         }
 
     }

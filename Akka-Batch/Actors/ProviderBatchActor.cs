@@ -23,7 +23,7 @@ namespace Akka.Batch.Actors
         {
             Receive<string>(msg => msg == "Start", m =>
             {
-                File
+               File
                 .ReadAllLines(_path)
                 .AsParallel()
                 .ToList()
