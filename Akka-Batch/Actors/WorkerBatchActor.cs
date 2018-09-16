@@ -25,7 +25,7 @@ namespace Akka.Batch
 
                 if(result.Status == ResultCode.OK)
                 {
-                    Sender.Tell(new MessageSuccess { Status = "OK", Message = "Success", Sender = msg.Sender });
+                    Sender.Tell(new MessageSuccess { Status = "OK", Message = "Success", RefSender = msg.RefSender });
                 }
                 else
                 {
