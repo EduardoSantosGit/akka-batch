@@ -13,10 +13,11 @@ namespace Akka.Batch
         {
             SystemStart = ActorSystem.Create("SystemStart");
 
-            var actor = SystemStart.ActorOf(Props.Create(() => new CommanderBatchActor()), ActorPath.Coordinator.Name);
+            var actor = SystemStart.ActorOf(Props.Create(() => 
+                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj.txt")), 
+                        ActorPath.Provider.Name);
 
-            var control = new ControlFlow(actor);
-            control.OnMonitor(@"D:\teste.txt");
+            actor.Tell("Start");
 
             SystemStart.WhenTerminated.Wait();
         }

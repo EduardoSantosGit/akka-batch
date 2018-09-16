@@ -5,10 +5,30 @@ using System.Text;
 
 namespace Akka.Batch.Messages
 {
+
     public class Message
     {
-        public IActorRef Sender { get; set; }
+        public IActorRef RefSender { get; set; }
     }
+
+    public class MessageItem : Message
+    {
+        public string Body { get; set; }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     public class MessageOneItem : Message
     {
