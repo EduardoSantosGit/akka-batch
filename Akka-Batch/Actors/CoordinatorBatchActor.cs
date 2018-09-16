@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,6 @@ namespace Akka.Batch
 {
     public class CoordinatorBatchActor : ReceiveActor
     {
-
         private IActorRef _actorRef;
 
         public CoordinatorBatchActor()
@@ -18,13 +18,13 @@ namespace Akka.Batch
         public void Processing()
         {
 
-            Receive<MessageOneItem>(msg => 
+            Receive<MessageItem>(msg => 
             {
-                var actorWorker = Context.Child(msg.LineData);
+                var actorWorker = Context.Child(msg.Body);
                 if (actorWorker.Equals(ActorRefs.Nobody))
                 {
                     actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor()), msg.LineData);
+                            new WorkerBatchActor()), msg.Body);
                 }
                 msg.RefSender = Sender;
                 actorWorker.Tell(msg);

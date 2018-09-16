@@ -3,34 +3,27 @@ using Akka.Batch.Messages;
 using Processor;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Akka.Batch
 {
     public class WorkerBatchActor : ReceiveActor
     {
-        private RequestClient _client;
+        private HttpClient _client;
 
         public WorkerBatchActor()
         {
-            _client = new RequestClient();
+            _client = new HttpClient();
             Sending();
         }
 
         public void Sending()
         {
-            Receive<MessageOneItem>(msg => 
+            Receive<MessageItem>(msg => 
             {
-                var result = _client.GetDataApi(msg.LineData);
-
-                if(result.Status == ResultCode.OK)
-                {
-                    Sender.Tell(new MessageSuccess { Status = "OK", Message = "Success", RefSender = msg.RefSender });
-                }
-                else
-                {
-                    Sender.Tell(new MessageError { Message = result.Value.ToString() });
-                }
+                Console.WriteLine("https://httpbin.org/get/" + msg.Body);
+                var r = _client.GetAsync("https://httpbin.org/get/" + msg.Body).Result;
             });
 
         }
