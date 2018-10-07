@@ -21,7 +21,7 @@ namespace Akka.Batch.Actors
 
         public void Reading()
         {
-            Receive<string>(msg => msg == "Start", m =>
+            Receive<MessageStart>(msg => 
             {
                File
                 .ReadAllLines(_path)

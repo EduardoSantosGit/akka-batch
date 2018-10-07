@@ -18,7 +18,7 @@ namespace Processor
         public async Task<Result<string>> GetAsync(string url)
         {
             var response = await _client.GetAsync(url);
-
+            
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 return new Result<string>(ResultCode.OK, await response.Content.ReadAsStringAsync());
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)

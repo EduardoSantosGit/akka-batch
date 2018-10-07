@@ -16,7 +16,11 @@ namespace Akka.Batch.Messages
         public string Body { get; set; }
     }
 
-
+    public class MessageStart : Message
+    {
+        public int CountBatch { get; set; }
+    }
+    
 
 
 
