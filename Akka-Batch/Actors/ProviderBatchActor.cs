@@ -21,20 +21,22 @@ namespace Akka.Batch.Actors
 
         public void Reading()
         {
-            Receive<MessageStart>(msg => 
+            Receive<MessageReader>(msg =>
             {
-               File
-                .ReadAllLines(_path)
-                .AsParallel()
-                .ToList()
-                .ForEach(x =>
+                var lines = File.ReadLines(_path).AsParallel()
+                                                 .Skip(msg.RefPointer)
+                                                 .Take(msg.CountBatch)
+                                                 .ToList();
+
+                msg.RefPointer = msg.RefPointer + msg.CountBatch;
+
+                var message = new MessageItem
                 {
-                    if (!string.IsNullOrEmpty(x) && !string.IsNullOrWhiteSpace(x))
-                    {
-                        var message = new MessageItem { Body = x, RefSender = Self };
-                        _commanderActor.Tell(message);
-                    }
-                });
+                    Batch = lines,
+                    RefSender = Self,
+                    Message = msg
+                };
+                _commanderActor.Tell(message);
             });
         }
 

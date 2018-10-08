@@ -20,6 +20,8 @@ namespace Akka.Batch.Actors
             Receive<MessageItem>(msg => 
             {
                 _coordinator.Tell(msg);
+
+                Sender.Tell(msg.Message);
             });
         }
 
