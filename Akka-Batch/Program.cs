@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Actors;
+using Akka.Batch.Messages;
 using Akka.Configuration;
 using System;
 
@@ -17,7 +18,7 @@ namespace Akka.Batch
                         new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj.txt")), 
                         ActorPath.Provider.Name);
 
-            actor.Tell("Start");
+            actor.Tell(new MessageReader { CountBatch = 10, RefPointer = 0 });
 
             SystemStart.WhenTerminated.Wait();
         }

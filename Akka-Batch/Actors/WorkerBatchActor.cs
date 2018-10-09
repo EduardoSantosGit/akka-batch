@@ -22,8 +22,8 @@ namespace Akka.Batch
         {
             Receive<MessageItem>(msg => 
             {
-                Console.WriteLine("https://httpbin.org/get/" + msg.Body);
-                var r = _client.GetAsync("https://httpbin.org/get/" + msg.Body).Result;
+                //Console.WriteLine("https://httpbin.org/get/" + msg.Body);
+                //var r = _client.GetAsync("https://httpbin.org/get/" + msg.Body).Result;
             });
 
         }

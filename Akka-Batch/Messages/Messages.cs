@@ -13,12 +13,14 @@ namespace Akka.Batch.Messages
 
     public class MessageItem : Message
     {
-        public string Body { get; set; }
+        public List<string> Batch { get; set; }
+        public MessageReader Message { get; set; }
     }
 
-    public class MessageStart : Message
+    public class MessageReader : Message
     {
         public int CountBatch { get; set; }
+        public int RefPointer { get; set; }
     }
     
 

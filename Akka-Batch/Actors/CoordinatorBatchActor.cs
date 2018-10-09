@@ -20,14 +20,14 @@ namespace Akka.Batch
 
             Receive<MessageItem>(msg => 
             {
-                var actorWorker = Context.Child(msg.Body);
-                if (actorWorker.Equals(ActorRefs.Nobody))
-                {
-                    actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor()), msg.Body);
-                }
-                msg.RefSender = Sender;
-                actorWorker.Tell(msg);
+                //var actorWorker = Context.Child(msg.Body);
+                //if (actorWorker.Equals(ActorRefs.Nobody))
+                //{
+                //    actorWorker = Context.ActorOf(Props.Create(() =>
+                //            new WorkerBatchActor()), msg.Body);
+                //}
+                //msg.RefSender = Sender;
+                //actorWorker.Tell(msg);
             });
 
             Receive<MessageSuccess>(msg => 
