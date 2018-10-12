@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using Gridsum.DataflowEx;
 using Processor;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,28 @@ namespace Akka.Batch
     public class WorkerBatchActor : ReceiveActor
     {
         private HttpClient _client;
+        private PipeLine _pipe;
 
         public WorkerBatchActor()
         {
             _client = new HttpClient();
+            _pipe = new PipeLine(new DataflowOptions
+            {
+                MonitorInterval = TimeSpan.FromSeconds(2),
+                PerformanceMonitorMode = DataflowOptions.PerformanceLogMode.Verbose,
+                //FlowMonitorEnabled = false,
+                //BlockMonitorEnabled = false,
+                RecommendedCapacity = 10000,
+                RecommendedParallelismIfMultiThreaded = 64,
+            }, 10);
             Sending();
         }
 
         public void Sending()
         {
-            Receive<MessageItem>(msg => 
+            ReceiveAsync<MessageItem>(async msg => 
             {
-                foreach (var item in msg.Batch)
-                {
-                    //Console.WriteLine("line " + item + "actor " + Self.Path);
-                }
-                
-                //Console.WriteLine("https://httpbin.org/get/" + msg.Body);
-                //var r = _client.GetAsync("https://httpbin.org/get/" + msg.Body).Result;
+                await _pipe.Start(msg.Batch);
             });
 
         }
