@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using Processor;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +10,12 @@ namespace Akka.Batch
     public class CoordinatorBatchActor : ReceiveActor
     {
         private IActorRef _actorRef;
+        private PipeLine _pipeline;
 
-        public CoordinatorBatchActor()
+        public CoordinatorBatchActor(PipeLine pipeline)
         {
+            _pipeline = pipeline;
+
             Processing();
         }
 
@@ -26,7 +30,7 @@ namespace Akka.Batch
                 if (actorWorker.Equals(ActorRefs.Nobody))
                 {
                     actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor()), $"{pointer}-{count}");
+                            new WorkerBatchActor(_pipeline)), $"{pointer}-{count}");
                 }
                 msg.RefSender = Sender;
                 actorWorker.Tell(msg);

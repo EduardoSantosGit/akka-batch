@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using Processor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,10 +12,12 @@ namespace Akka.Batch.Actors
     {
         private string _path;
         public IActorRef _commanderActor;
+        private PipeLine _pipeline;
 
-        public ProviderBatchActor(string path)
+        public ProviderBatchActor(string path, PipeLine pipeline)
         {
             _path = path;
+            _pipeline = pipeline;
 
             Reading();
         }
@@ -43,7 +46,7 @@ namespace Akka.Batch.Actors
         protected override void PreStart()
         {
             _commanderActor = Context.ActorOf(Props.Create(() =>
-                new CommanderBatchActor()), ActorPath.Commander.Name);
+                new CommanderBatchActor(_pipeline)), ActorPath.Commander.Name);
 
             base.PreStart();
         }

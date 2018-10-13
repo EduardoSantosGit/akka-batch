@@ -12,20 +12,13 @@ namespace Akka.Batch
     public class WorkerBatchActor : ReceiveActor
     {
         private HttpClient _client;
-        private PipeLine _pipe;
+        private PipeLine _pipeline;
 
-        public WorkerBatchActor()
+        public WorkerBatchActor(PipeLine pipeline)
         {
             _client = new HttpClient();
-            _pipe = new PipeLine(new DataflowOptions
-            {
-                MonitorInterval = TimeSpan.FromSeconds(2),
-                PerformanceMonitorMode = DataflowOptions.PerformanceLogMode.Verbose,
-                //FlowMonitorEnabled = false,
-                //BlockMonitorEnabled = false,
-                RecommendedCapacity = 10000,
-                RecommendedParallelismIfMultiThreaded = 64,
-            }, 10);
+            _pipeline = pipeline;
+
             Sending();
         }
 
@@ -33,7 +26,7 @@ namespace Akka.Batch
         {
             ReceiveAsync<MessageItem>(async msg => 
             {
-                await _pipe.Start(msg.Batch);
+                await _pipeline.Start(msg.Batch);
             });
 
         }

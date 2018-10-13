@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Messages;
+using Processor;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +10,12 @@ namespace Akka.Batch.Actors
     public class CommanderBatchActor : ReceiveActor
     {
         private IActorRef _coordinator;
+        private PipeLine _pipeline;
 
-        public CommanderBatchActor()
+        public CommanderBatchActor(PipeLine pipeline)
         {
+            _pipeline = pipeline;
+
             Working();
         }
 
@@ -28,7 +32,7 @@ namespace Akka.Batch.Actors
         protected override void PreStart()
         {
             _coordinator = Context.ActorOf(Props.Create(() =>
-                new CoordinatorBatchActor(), SupervisorStrategy()), ActorPath.Coordinator.Name);
+                new CoordinatorBatchActor(_pipeline), SupervisorStrategy()), ActorPath.Coordinator.Name);
 
             base.PreStart();
         }
