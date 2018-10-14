@@ -13,10 +13,12 @@ namespace Akka.Batch.Actors
         private string _path;
         public IActorRef _commanderActor;
         private PipeLine _pipeline;
+        private int _countLines;
 
         public ProviderBatchActor(string path, PipeLine pipeline)
         {
             _path = path;
+            _countLines = File.ReadLines(_path).Count();
             _pipeline = pipeline;
 
             Reading();
@@ -39,6 +41,10 @@ namespace Akka.Batch.Actors
                     RefSender = Self,
                     Message = msg
                 };
+                
+                Console.WriteLine("Actor {0}, count {1} , lines {2}", 
+                    Self.Path, msg.CountBatch, lines.Count);
+
                 _commanderActor.Tell(message);
             });
         }

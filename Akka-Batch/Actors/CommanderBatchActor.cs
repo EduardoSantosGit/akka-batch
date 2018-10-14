@@ -25,7 +25,10 @@ namespace Akka.Batch.Actors
             {
                 _coordinator.Tell(msg);
 
-                Sender.Tell(msg.Message);
+                if (msg.Batch.Count > 0)
+                {
+                    Sender.Tell(msg.Message);
+                }
             });
         }
 
