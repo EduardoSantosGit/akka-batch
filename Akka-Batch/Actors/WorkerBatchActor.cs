@@ -24,9 +24,10 @@ namespace Akka.Batch
 
         public void Sending()
         {
-            ReceiveAsync<MessageItem>(async msg => 
+            Receive<MessageItem>(msg => 
             {
-                await _pipeline.Start(msg.Batch);
+                Console.WriteLine("ActorName " + Self.Path);
+                _pipeline.Start(msg.Batch).Wait();
             });
 
         }

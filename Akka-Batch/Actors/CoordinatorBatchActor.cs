@@ -26,12 +26,12 @@ namespace Akka.Batch
             {
                 var pointer = msg.Message.RefPointer.ToString();
                 var count = msg.Message.CountBatch.ToString();
-                var actorWorker = Context.Child($"{pointer}-{count}");
+                var actorName = $"{ActorPath.Worker.Name}-{pointer}-{count}";
+                var actorWorker = Context.Child(actorName);
                 if (actorWorker.Equals(ActorRefs.Nobody))
                 {
                     actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor(_pipeline)), 
-                            $"{ActorPath.Worker.Name}-{pointer}-{count}");
+                            new WorkerBatchActor(_pipeline)), actorName);
                 }
                 msg.RefSender = Sender;
                 actorWorker.Tell(msg);

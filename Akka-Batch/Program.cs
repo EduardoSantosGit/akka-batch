@@ -24,13 +24,13 @@ namespace Akka.Batch
                 //BlockMonitorEnabled = false,
                 RecommendedCapacity = 10000,
                 RecommendedParallelismIfMultiThreaded = 64,
-            }, 10);
+            }, 20);
 
             var actor = SystemStart.ActorOf(Props.Create(() => 
-                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj.txt", pipeline)), 
+                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj2.txt", pipeline)), 
                         ActorPath.Provider.Name);
 
-            actor.Tell(new MessageReader { CountBatch = 10, RefPointer = 0 });
+            actor.Tell(new MessageReader { CountBatch = 20, RefPointer = 0 });
 
             SystemStart.WhenTerminated.Wait();
         }
