@@ -30,7 +30,8 @@ namespace Akka.Batch
                 if (actorWorker.Equals(ActorRefs.Nobody))
                 {
                     actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor(_pipeline)), $"{pointer}-{count}");
+                            new WorkerBatchActor(_pipeline)), 
+                            $"{ActorPath.Worker.Name}-{pointer}-{count}");
                 }
                 msg.RefSender = Sender;
                 actorWorker.Tell(msg);
