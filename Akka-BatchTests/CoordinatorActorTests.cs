@@ -13,7 +13,7 @@ namespace Akka_BatchTests
         public void CoordinatorActor_WhenLineString_ReturnsSuccessMessage()
         {
 
-            var actor = Sys.ActorOf(Props.Create(() => new CoordinatorBatchActor()));
+            var actor = Sys.ActorOf(Props.Create(() => new CoordinatorBatchActor(null)));
             var result = default(MessageSuccess);
 
             Within(TimeSpan.FromSeconds(15), () => 
