@@ -20,11 +20,9 @@ namespace Akka.Batch
             {
                 MonitorInterval = TimeSpan.FromSeconds(2),
                 PerformanceMonitorMode = DataflowOptions.PerformanceLogMode.Verbose,
-                //FlowMonitorEnabled = false,
-                //BlockMonitorEnabled = false,
                 RecommendedCapacity = 10000,
                 RecommendedParallelismIfMultiThreaded = 64,
-            }, 20);
+            }, 20, new System.Net.Http.HttpClient());
 
             var actor = SystemStart.ActorOf(Props.Create(() => 
                         new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj2.txt", pipeline)), 
