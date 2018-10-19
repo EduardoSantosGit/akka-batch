@@ -18,12 +18,15 @@ namespace Processor
         private TransformBlock<string, HttpResponseMessage> _requestBlock;
         private ActionBlock<HttpResponseMessage> _flowBlock;
         private int _totalOut;
+        private HttpClient _client;
 
         public PipeLine(
             DataflowOptions dataflowOptions,
-            int maxDegreeOfParallelism) 
+            int maxDegreeOfParallelism,
+            HttpClient client) 
             : base(dataflowOptions)
         {
+            _client = client;
             _dataflowOptions = dataflowOptions;
             _options = dataflowOptions.ToExecutionBlockOption(true);
             _options.MaxDegreeOfParallelism = maxDegreeOfParallelism;
@@ -37,9 +40,7 @@ namespace Processor
 
                 Console.WriteLine("lines " + _totalOut);
 
-                //var http = new HttpClient();
-
-                //var response = http.GetAsync("http://localhost:3000/endpoint/info").Result;
+                var response = _client.GetAsync("http://localhost:3000/endpoint/info").Result;
 
                 return default(HttpResponseMessage);
             }, _options);
