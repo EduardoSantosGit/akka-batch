@@ -1,5 +1,7 @@
 ﻿using Akka.Actor;
+using Akka.Batch.Actors;
 using Akka.Batch.Messages;
+using Akka.Routing;
 using Processor;
 using System;
 using System.Collections.Generic;
@@ -51,6 +53,11 @@ namespace Akka.Batch
 
         protected override void PreStart()
         {
+            var e = Context.ActorOf(Props.Create(() => new WorkerPoolActor())
+                    .WithDispatcher("custom-task-dispatcher")
+                    .WithDeploy(new Deploy(
+                     new SmallestMailboxPool(100 ,new DefaultResizer(100, 100), SupervisorStrategy(), "custom-task-dispatcher")
+                 )), ActorPath.WorkerPool.Name);
             base.PreStart();
         }
 
