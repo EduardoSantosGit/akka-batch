@@ -14,7 +14,20 @@ namespace Akka.Batch
 
         static void Main(string[] args)
         {
-            SystemStart = ActorSystem.Create("SystemStart");
+            var config = ConfigurationFactory.ParseString(@"
+            custom-task-dispatcher {
+                type = Dispatcher
+                throughput = 100
+                throughput-deadline-time = 0ms
+            }
+            akka.actor.deployment {
+                /my-actor {
+                    dispatcher = custom-task-dispatcher
+                }
+            }");
+
+
+            SystemStart = ActorSystem.Create("SystemStart", config);
 
             var pipeline = new PipeLine(new DataflowOptions
             {
