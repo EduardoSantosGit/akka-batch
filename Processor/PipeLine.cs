@@ -37,6 +37,10 @@ namespace Processor
 
                 Console.WriteLine("lines " + _totalOut);
 
+                //var http = new HttpClient();
+
+                //var response = http.GetAsync("http://localhost:3000/endpoint/info").Result;
+
                 return default(HttpResponseMessage);
             }, _options);
 
