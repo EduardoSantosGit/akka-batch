@@ -15,17 +15,16 @@ namespace Akka.Batch
         static void Main(string[] args)
         {
             var config = ConfigurationFactory.ParseString(@"
-            custom-task-dispatcher {
-                type = Dispatcher
-                throughput = 100
-                throughput-deadline-time = 0ms
-            }
             akka.actor.deployment {
-                /my-actor {
+               /workerpool {
                     dispatcher = custom-task-dispatcher
-                }
-            }");
-
+               } 
+            }
+            custom-task-dispatcher {
+              type = TaskDispatcher,
+              throughput = 1024
+            }
+            "); 
 
             SystemStart = ActorSystem.Create("SystemStart", config);
 
@@ -37,11 +36,11 @@ namespace Akka.Batch
                 RecommendedParallelismIfMultiThreaded = 64,
             }, 20, new System.Net.Http.HttpClient());
 
-            var actor = SystemStart.ActorOf(Props.Create(() => 
-                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj2.txt", pipeline)), 
+            var actor = SystemStart.ActorOf(Props.Create(() =>
+                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj3.txt", pipeline)),
                         ActorPath.Provider.Name);
 
-            actor.Tell(new MessageReader { CountBatch = 20, RefPointer = 0 });
+            actor.Tell(new MessageReader { CountBatch = 1, RefPointer = 0 });
 
             SystemStart.WhenTerminated.Wait();
         }
