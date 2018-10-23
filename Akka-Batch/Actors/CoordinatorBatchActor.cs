@@ -24,19 +24,30 @@ namespace Akka.Batch
         public void Processing()
         {
 
+            //Receive<MessageItem>(msg => 
+            //{
+            //    var pointer = msg.Message.RefPointer.ToString();
+            //    var count = msg.Message.CountBatch.ToString();
+            //    var actorName = $"{ActorPath.Worker.Name}-{pointer}-{count}";
+            //    var actorWorker = Context.Child(actorName);
+            //    if (actorWorker.Equals(ActorRefs.Nobody))
+            //    {
+            //        actorWorker = Context.ActorOf(Props.Create(() =>
+            //                new WorkerBatchActor(_pipeline)), actorName);
+            //    }
+            //    msg.RefSender = Sender;
+            //    actorWorker.Tell(msg);
+            //});
+
             Receive<MessageItem>(msg => 
             {
                 var pointer = msg.Message.RefPointer.ToString();
                 var count = msg.Message.CountBatch.ToString();
-                var actorName = $"{ActorPath.Worker.Name}-{pointer}-{count}";
-                var actorWorker = Context.Child(actorName);
-                if (actorWorker.Equals(ActorRefs.Nobody))
-                {
-                    actorWorker = Context.ActorOf(Props.Create(() =>
-                            new WorkerBatchActor(_pipeline)), actorName);
-                }
+
+                //Console.WriteLine("Coordinator Send Message Pointer {0} Count {1}",
+                  //  pointer, count);
                 msg.RefSender = Sender;
-                actorWorker.Tell(msg);
+                _actorRef.Tell(msg);
             });
 
             Receive<MessageSuccess>(msg => 
@@ -48,16 +59,19 @@ namespace Akka.Batch
             {
                 msg.RefSender.Tell(msg);
             });
-
         }
 
         protected override void PreStart()
         {
-            var e = Context.ActorOf(Props.Create(() => new WorkerPoolActor())
+            _actorRef = Context.ActorOf(Props.Create(() => new WorkerPoolActor())
                     .WithDispatcher("custom-task-dispatcher")
                     .WithDeploy(new Deploy(
-                     new SmallestMailboxPool(100 ,new DefaultResizer(100, 100), SupervisorStrategy(), "custom-task-dispatcher")
-                 )), ActorPath.WorkerPool.Name);
+                              new SmallestMailboxPool(10, new DefaultResizer(10, 10), 
+                              SupervisorStrategy(), 
+                              "custom-task-dispatcher", 
+                              true)
+                         ))
+                    , ActorPath.WorkerPool.Name);
             base.PreStart();
         }
 
