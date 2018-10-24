@@ -37,7 +37,7 @@ namespace Akka.Batch
             }, 20, new System.Net.Http.HttpClient());
 
             var actor = SystemStart.ActorOf(Props.Create(() =>
-                        new ProviderBatchActor(@"C:\Users\eduar\Desktop\lista_cnpj3.txt", pipeline)),
+                        new ProviderBatchActor(@"C:\Users\staff\Desktop\listacnpjs.txt", pipeline)),
                         ActorPath.Provider.Name);
 
             actor.Tell(new MessageReader { CountBatch = 1, RefPointer = 0 });
