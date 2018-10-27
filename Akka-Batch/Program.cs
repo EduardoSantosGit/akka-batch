@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Batch.Actors;
+using Akka.Batch.Actors.v2;
 using Akka.Batch.Messages;
 using Akka.Configuration;
 using Gridsum.DataflowEx;
@@ -28,19 +29,19 @@ namespace Akka.Batch
 
             SystemStart = ActorSystem.Create("SystemStart", config);
 
-            var pipeline = new PipeLine(new DataflowOptions
-            {
-                MonitorInterval = TimeSpan.FromSeconds(2),
-                PerformanceMonitorMode = DataflowOptions.PerformanceLogMode.Verbose,
-                RecommendedCapacity = 10000,
-                RecommendedParallelismIfMultiThreaded = 64,
-            }, 20, new System.Net.Http.HttpClient());
+            //var pipeline = new PipeLine(new DataflowOptions
+            //{
+            //    MonitorInterval = TimeSpan.FromSeconds(2),
+            //    PerformanceMonitorMode = DataflowOptions.PerformanceLogMode.Verbose,
+            //    RecommendedCapacity = 10000,
+            //    RecommendedParallelismIfMultiThreaded = 64,
+            //}, 20, new System.Net.Http.HttpClient());
 
-            var actor = SystemStart.ActorOf(Props.Create(() =>
-                        new ProviderBatchActor(@"C:\Users\staff\Desktop\listacnpjs.txt", pipeline)),
-                        ActorPath.Provider.Name);
+            //var actor = SystemStart.ActorOf(Props.Create(() =>
+            //            new ProviderBatchActor(@"C:\Users\staff\Desktop\listacnpjs.txt", pipeline)),
+            //            ActorPath.Provider.Name);
 
-            actor.Tell(new MessageReader { CountBatch = 1, RefPointer = 0 });
+            //actor.Tell(new MessageReader { CountBatch = 1, RefPointer = 0 });
 
             SystemStart.WhenTerminated.Wait();
         }
